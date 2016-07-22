@@ -295,7 +295,7 @@ public class WalletService {
                         addr = new InetSocketAddress( parts[0], Integer.parseInt(parts[1]) );
                     }
                     // note: isUnresolved check should be removed once we fix PeerAddress
-                    if( addr != null && !addr.isUnresolved() ) {
+                    if( !addr.isUnresolved() ) {
                         peerAddressList.add( new PeerAddress( addr.getAddress(), addr.getPort() ));
                     }
                 }

@@ -28,6 +28,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +41,7 @@ public class SeedPeersSocks5Dns implements PeerDiscovery {
     private Socks5Proxy proxy;
     private NetworkParameters params;
     private InetSocketAddress[] seedAddrs;
-    private InetSocketAddress[] seedAddrsIP;
     private int pnseedIndex;
-    
-    private InetSocketAddress[] seedAddrsResolved;
     
     private static final Logger log = LoggerFactory.getLogger(SeedPeersSocks5Dns.class);
 
@@ -67,11 +65,6 @@ public class SeedPeersSocks5Dns implements PeerDiscovery {
             this.seedAddrs = new InetSocketAddress[] { InetSocketAddress.createUnresolved( "cajrifqkvalh2ooa.onion", 8333 ),
                                                        InetSocketAddress.createUnresolved( "bk7yp6epnmcllq72.onion", 8333 )
             };
-        }
-        
-        seedAddrsResolved = new InetSocketAddress[seedAddrs.length];
-        for(int idx = seedAddrs.length; idx < seedAddrsResolved.length; idx ++) {
-            seedAddrsResolved[idx] = seedAddrsIP[idx-seedAddrs.length];
         }
     }
 
@@ -100,15 +93,17 @@ public class SeedPeersSocks5Dns implements PeerDiscovery {
             throw new PeerDiscoveryException("No IP address seeds configured; unable to find any peers");
         }
 
-        if (pnseedIndex >= seedAddrsResolved.length) {
-            return null;
+        while( pnseedIndex < seedAddrs.length ) {
+            InetSocketAddress addr = lookup( proxy, seedAddrs[pnseedIndex] );
+            if( !addr.isUnresolved() ) {
+                seedAddrs[pnseedIndex] = addr;  // cache resolved addr
+                log.debug("SeedPeersSocks5Dns::nextPeer: " + addr );
+                return addr;
+            }
+            pnseedIndex ++;
         }
-        if( seedAddrsResolved[pnseedIndex] == null ) {
-            seedAddrsResolved[pnseedIndex] = lookup( proxy, seedAddrs[pnseedIndex] );
-        }
-        log.error("SeedPeersSocks5Dns::nextPeer: " + seedAddrsResolved[pnseedIndex] );
         
-        return seedAddrsResolved[pnseedIndex++];
+        return null;
     }
 
     /**
@@ -124,19 +119,25 @@ public class SeedPeersSocks5Dns implements PeerDiscovery {
     }
 
     /**
-     * returns all seed peers, performs hostname lookups if necessary.
+     * returns all resolved seed peers, performs hostname lookups if necessary.
      */
     private InetSocketAddress[] allPeers() throws UnknownHostException {
-        for (int i = 0; i < seedAddrsResolved.length; ++i) {
-            if( seedAddrsResolved[i] == null ) {
-                seedAddrsResolved[i] = lookup( proxy, seedAddrs[i] );
+        ArrayList<InetSocketAddress> list = new ArrayList<InetSocketAddress>();
+        
+        for( int i = 0; i < seedAddrs.length; i ++ ) {
+            seedAddrs[i] = lookup(proxy, seedAddrs[i]);
+            if( !seedAddrs[i].isUnresolved() ) {
+                list.add(seedAddrs[i]);
             }
         }
-        return seedAddrsResolved;
+        
+        log.debug("SeedPeersSocks5Dns::allPeers count: " + list.size() );
+        return list.toArray(new InetSocketAddress[list.size()]);
     }
 
     /**
      * Resolves a hostname via remote DNS over socks5 proxy.
+     * caller should check value of InetSocketAddress.isUnresolved()
      */
     public static InetSocketAddress lookup( Socks5Proxy proxy, InetSocketAddress addr ) {
         if( !addr.isUnresolved() ) {
@@ -158,7 +159,7 @@ public class SeedPeersSocks5Dns implements PeerDiscovery {
         } catch (Exception e) {
             log.error("Error resolving " + addr.getHostString() + ". Exception:\n" + e.toString() );
         }
-        return null;
+        return addr;
     }
 
     /**
