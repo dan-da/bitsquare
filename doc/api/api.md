@@ -72,7 +72,7 @@ Lists my accounts.
             "account_type": "checking"
         },
         "limitations": {
-            "max-trade-duration: 345600,
+            "max-trade-duration": 345600,
             "max-trade-limit": 1
         }
     },
@@ -119,14 +119,14 @@ Returns list of all currencies.
         "symbol": "ETH",
         "name": "Ethereum",
         "type": "crypto",
-        "precision: 8,
+        "precision": 8,
         "display_precision": 8
     },
     {
         "symbol": "EUR",
         "name": "Euro",
         "type": "fiat",
-        "precision: 8,
+        "precision": 8,
         "display_precision": 2
     },
     ...
@@ -210,7 +210,7 @@ Returns details of a specific offer.
 ### Sample Response
 ```json
 {
-    "offer_id": "f6dab9d5-163f-4c2a-9c35-2d4c54da82e3"
+    "offer_id": "f6dab9d5-163f-4c2a-9c35-2d4c54da82e3",
     "direction": "sell",
     "status": "live",
     "funding": {
@@ -272,7 +272,7 @@ Lists offers according to selection criteria.
 ```json
 [
     {
-        "offer_id": "f6dab9d5-163f-4c2a-9c35-2d4c54da82e3"
+        "offer_id": "f6dab9d5-163f-4c2a-9c35-2d4c54da82e3",
         "direction": "sell",
         "status": "live",
         "funding": {
@@ -584,7 +584,7 @@ Moves BTC funds from internal wallet to offer, at time of offer creation.
 {
     "offer_id": "f6dab9d5-163f-4c2a-9c35-2d4c54da82e3",
     "funded": true,
-    "funds_moved": 1.342
+    "funds_moved": 1.342,
     "source_address": "<btc addr>"
 }
 ```
@@ -687,7 +687,7 @@ APIs will return an error struct on any error.  The error struct looks like:
 ```json
 {
     "error": true,
-    "code: <int>,
+    "code: 100,
     "message": <string>
 }
 ```

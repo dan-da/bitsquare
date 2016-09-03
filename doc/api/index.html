@@ -175,7 +175,7 @@ RPC API.</p>
             &quot;account_type&quot;: &quot;checking&quot;
         },
         &quot;limitations&quot;: {
-            &quot;max-trade-duration: 345600,
+            &quot;max-trade-duration&quot;: 345600,
             &quot;max-trade-limit&quot;: 1
         }
     },
@@ -226,14 +226,14 @@ RPC API.</p>
         &quot;symbol&quot;: &quot;ETH&quot;,
         &quot;name&quot;: &quot;Ethereum&quot;,
         &quot;type&quot;: &quot;crypto&quot;,
-        &quot;precision: 8,
+        &quot;precision&quot;: 8,
         &quot;display_precision&quot;: 8
     },
     {
         &quot;symbol&quot;: &quot;EUR&quot;,
         &quot;name&quot;: &quot;Euro&quot;,
         &quot;type&quot;: &quot;fiat&quot;,
-        &quot;precision: 8,
+        &quot;precision&quot;: 8,
         &quot;display_precision&quot;: 2
     },
     ...
@@ -336,7 +336,7 @@ RPC API.</p>
             <div class="requestexample">http://localhost/api/offer_detail?offer_id=f6dab9d5-163f-4c2a-9c35-2d4c54da82e3</div>
             <h4>Sample Response</h4>
             <div class="responseexample">{
-    &quot;offer_id&quot;: &quot;f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&quot;
+    &quot;offer_id&quot;: &quot;f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&quot;,
     &quot;direction&quot;: &quot;sell&quot;,
     &quot;status&quot;: &quot;live&quot;,
     &quot;funding&quot;: {
@@ -420,7 +420,7 @@ RPC API.</p>
             <h4>Sample Response</h4>
             <div class="responseexample">[
     {
-        &quot;offer_id&quot;: &quot;f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&quot;
+        &quot;offer_id&quot;: &quot;f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&quot;,
         &quot;direction&quot;: &quot;sell&quot;,
         &quot;status&quot;: &quot;live&quot;,
         &quot;funding&quot;: {
@@ -952,7 +952,7 @@ trade_id as the offer_id.</li>
             <div class="responseexample">{
     &quot;offer_id&quot;: &quot;f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&quot;,
     &quot;funded&quot;: true,
-    &quot;funds_moved&quot;: 1.342
+    &quot;funds_moved&quot;: 1.342,
     &quot;source_address&quot;: &quot;&lt;btc addr&gt;&quot;
 }</div>
         </div>
@@ -1159,7 +1159,7 @@ trade_id as the offer_id.</li>
 <div class="responseexample">
 {
     &quot;error&quot;: true,
-    &quot;code: &lt;int&gt;,
+    &quot;code: 100,
     &quot;message&quot;: &lt;string&gt;
 }</div>
 Results from successful API calls will not contain the &quot;error&quot; key, or if present the value will be false.
