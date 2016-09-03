@@ -84,7 +84,7 @@ Lists my accounts.
             "currency": "XMR"
         },
         "limitations": {
-            "max-trade-duration: 345600,
+            "max-trade-duration": 345600,
             "max-trade-limit": 1
         }
     },
