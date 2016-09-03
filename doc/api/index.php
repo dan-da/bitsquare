@@ -91,7 +91,7 @@ $errorinfo = [
     'example' => <<< END
 {
     "error": true,
-    "code: <int>,
+    "code: 100,
     "message": <string>
 }
 END

@@ -20,14 +20,14 @@ class api_currency_list {
         "symbol": "ETH",
         "name": "Ethereum",
         "type": "crypto",
-        "precision: 8,
+        "precision": 8,
         "display_precision": 8
     },
     {
         "symbol": "EUR",
         "name": "Euro",
         "type": "fiat",
-        "precision: 8,
+        "precision": 8,
         "display_precision": 2
     },
     ...

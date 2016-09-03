@@ -22,7 +22,7 @@ class api_wallet_fund_offer_internal {
 {
     "offer_id": "f6dab9d5-163f-4c2a-9c35-2d4c54da82e3",
     "funded": true,
-    "funds_moved": 1.342
+    "funds_moved": 1.342,
     "source_address": "<btc addr>"
 }
 END

@@ -19,7 +19,7 @@ class api_offer_detail {
                         [ 'request' => '/offer_detail?offer_id=f6dab9d5-163f-4c2a-9c35-2d4c54da82e3',
                           'response' => <<< END
 {
-    "offer_id": "f6dab9d5-163f-4c2a-9c35-2d4c54da82e3"
+    "offer_id": "f6dab9d5-163f-4c2a-9c35-2d4c54da82e3",
     "direction": "sell",
     "status": "live",
     "funding": {

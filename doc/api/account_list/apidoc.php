@@ -29,7 +29,7 @@ class api_account_list {
             "account_type": "checking"
         },
         "limitations": {
-            "max-trade-duration: 345600,
+            "max-trade-duration": 345600,
             "max-trade-limit": 1
         }
     },
