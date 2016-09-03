@@ -1,0 +1,1172 @@
+
+<html>
+<head>
+  <title>Bitsquare API Specification</title>
+  <link href="https://market.bitsquare.io/css/bitsquare/style.css" media="screen" rel="stylesheet" type="text/css">
+  <link href="https://market.bitsquare.io/css/bitsquare/css.css" id="opensans-css" media="all" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://market.bitsquare.io/css/styles.css" type="text/css">
+  <link href="https://market.bitsquare.io/favicon.ico" rel="icon" type="image/x-icon">
+        
+<style>
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 12px;
+    margin-bottom: 10px;
+}
+#apiversion {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+div.api, div.toc, div.errors, div.intro {
+    width: 80%;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+div.method {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+div.description {
+    margin-left: 25px;
+}
+div.requestexample {
+    margin-left: 25px;
+    margin-right: 25px;
+    border: grey dashed 1px;
+    background-color: white;
+    padding: 10px;
+}
+div.responseexample {
+    margin-left: 25px;
+    margin-right: 25px;
+    white-space: pre;
+    margin-bottom: 10px;
+    border: grey dashed 1px;
+    background-color: white;
+    padding: 10px;
+}
+div.params div {
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-bottom: 20px;
+}
+div.toc div.apigroup {
+    margin-left: 15px;
+}
+div.toc ul {
+    margin: 0px;
+    list-style-type: square;
+}
+div.toc h5 {
+    margin: 0px;
+}
+div.errors {
+    white-space: pre-wrap;
+}
+div.intro td {
+    padding: 0px;
+    padding-right: 10px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="intro widget">
+<h2>Bitsquare API Specification</h2>
+<p id="apiversion">Version: bitsquare-api-1.0.0-draft2
+</p>
+<table cellspacing="0">
+<tr><td>Authors:</td><td>Dan Libby &lt;dan@osc.co.cr&gt;, Mike Rosseel &lt;mike.rosseel@gmail.com&gt;, Manfred Karrer &lt;manfred@bitsquare.io&gt;<br/></td></tr>
+<tr><td>Created:</td><td>2016-08-19<br/></td></tr>
+<tr><td>Last Updated:</td><td>2016-08-19</td></tr>
+</table>
+
+<h4>Intro</h4>
+<p>The API is part of the Bitsquare application and may be accessed by making
+REST requests directly to bitsquare running on localhost.</p>
+
+<p>REST was chosen over pure json-rpc because it simplifies development and
+debugging of client apps when developers can easily try out APIs directly in a
+web browser or via curl.</p>
+
+<p>Authentication is performed via HTTP Basic Auth.  An RPC username and password
+must be configured or the RPC service will not be available. By default, access
+is only allowed via localhost. This API is intended for use in trusted
+environments only.  This closely mirrors the security model of the bitcoin-core
+RPC API.</p>
+
+</div>
+
+<div class="toc widget">
+    <h4>Bitsquare APIs:</h4>
+    <div class="apigroup">
+    <h5>Account</h5>
+    <ul>
+        <li><a href="#account_list">account_list</a></li>
+    </ul>
+    </div>
+    <div class="apigroup">
+    <h5>Currency</h5>
+    <ul>
+        <li><a href="#currency_list">currency_list</a></li>
+    </ul>
+    </div>
+    <div class="apigroup">
+    <h5>Market</h5>
+    <ul>
+        <li><a href="#market_list">market_list</a></li>
+    </ul>
+    </div>
+    <div class="apigroup">
+    <h5>Offer</h5>
+    <ul>
+        <li><a href="#offer_cancel">offer_cancel</a></li>
+        <li><a href="#offer_detail">offer_detail</a></li>
+        <li><a href="#offer_list">offer_list</a></li>
+        <li><a href="#offer_make">offer_make</a></li>
+        <li><a href="#offer_take">offer_take</a></li>
+    </ul>
+    </div>
+    <div class="apigroup">
+    <h5>Trade</h5>
+    <ul>
+        <li><a href="#trade_detail">trade_detail</a></li>
+    </ul>
+    </div>
+    <div class="apigroup">
+    <h5>Wallet</h5>
+    <ul>
+        <li><a href="#wallet_addresses">wallet_addresses</a></li>
+        <li><a href="#wallet_deposit_address">wallet_deposit_address</a></li>
+        <li><a href="#wallet_detail">wallet_detail</a></li>
+        <li><a href="#wallet_fund_offer_internal">wallet_fund_offer_internal</a></li>
+        <li><a href="#wallet_send">wallet_send</a></li>
+        <li><a href="#wallet_tx_list">wallet_tx_list</a></li>
+    </ul>
+    </div>
+    
+    Error responses are documented <a href="#errors">here</a>.
+    
+</div>
+
+
+<div class="api widget">
+    <div class="method" id="account_list">/api/account_list</div>
+    <div class="description">Lists my accounts.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/account_list</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">[
+    {
+        &quot;name&quot;: &quot;National Bank Transfer 234332523, 23544351&quot;,
+        &quot;payment_method&quot;: &quot;national_bank_transfer&quot;,
+        &quot;method_detail&quot;: {
+            &quot;country&quot;: &quot;us&quot;,
+            &quot;currency&quot;: &quot;USD&quot;,
+            &quot;account_holder_name&quot;: &quot;John Doe&quot;,
+            &quot;routing_number&quot;: &quot;23454352435&quot;,
+            &quot;account_number&quot;: &quot;982353543-345234-323423&quot;,
+            &quot;account_type&quot;: &quot;checking&quot;
+        },
+        &quot;limitations&quot;: {
+            &quot;max-trade-duration: 345600,
+            &quot;max-trade-limit&quot;: 1
+        }
+    },
+    {
+        &quot;name&quot;: &quot;Cryptocurrencies, XMR, 44AFFq5k...&quot;,
+        &quot;payment_method&quot;: &quot;altcoins&quot;,
+        &quot;method_detail&quot;: {
+            &quot;address&quot;: &quot;44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A&quot;,
+            &quot;currency&quot;: &quot;XMR&quot;
+        },
+        &quot;limitations&quot;: {
+            &quot;max-trade-duration: 345600,
+            &quot;max-trade-limit&quot;: 1
+        }
+    },
+    ...
+]</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                None
+                </div>
+    </div>
+    
+        <div class="notes">
+        <h4>Notes</h4>
+        <ul>
+                <li class="noteitem">The keys used inside the 'method_detail' will vary depending on the value of 'payment_method'.  All other keys are always present.</li>
+                <li class="noteitem">TODO: document all payment methods.</li>
+                </ul>
+    </div>
+        
+        
+</div>
+<div class="api widget">
+    <div class="method" id="currency_list">/api/currency_list</div>
+    <div class="description">Returns list of all currencies.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/currency_list</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">[
+    {
+        &quot;symbol&quot;: &quot;ETH&quot;,
+        &quot;name&quot;: &quot;Ethereum&quot;,
+        &quot;type&quot;: &quot;crypto&quot;,
+        &quot;precision: 8,
+        &quot;display_precision&quot;: 8
+    },
+    {
+        &quot;symbol&quot;: &quot;EUR&quot;,
+        &quot;name&quot;: &quot;Euro&quot;,
+        &quot;type&quot;: &quot;fiat&quot;,
+        &quot;precision: 8,
+        &quot;display_precision&quot;: 2
+    },
+    ...
+]</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                None
+                </div>
+    </div>
+    
+        
+        
+</div>
+<div class="api widget">
+    <div class="method" id="market_list">/api/market_list</div>
+    <div class="description">Returns list of all markets.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/market_list</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">[
+    {
+        &quot;pair&quot;: &quot;dash_btc&quot;,
+        &quot;lsymbol&quot;: &quot;DASH&quot;,
+        &quot;rsymbol&quot;: &quot;BTC&quot;,
+    },
+    ...
+]</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                None
+                </div>
+    </div>
+    
+        
+        
+</div>
+<div class="api widget">
+    <div class="method" id="offer_cancel">/api/offer_cancel</div>
+    <div class="description">Cancels an existing offer</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/offer_cancel?offer_id=f6dab9d5-163f-4c2a-9c35-2d4c54da82e3</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">true</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >offer_id</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >Identifies offer to cancel</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        <div class="notes">
+        <h4>Notes</h4>
+        <ul>
+                <li class="noteitem">TBD:  other info should be returned related to refund?</li>
+                </ul>
+    </div>
+        
+        
+</div>
+<div class="api widget">
+    <div class="method" id="offer_detail">/api/offer_detail</div>
+    <div class="description">Returns details of a specific offer.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/offer_detail?offer_id=f6dab9d5-163f-4c2a-9c35-2d4c54da82e3</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">{
+    &quot;offer_id&quot;: &quot;f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&quot;
+    &quot;direction&quot;: &quot;sell&quot;,
+    &quot;status&quot;: &quot;live&quot;,
+    &quot;funding&quot;: {
+        &quot;deposit_amount&quot;: 0.01,
+        &quot;deposit_address&quot;: &quot;14w4mZx4b6JjtEd9BZPnLCSXzbHjKH3Pn3&quot;,
+        &quot;tx-list&quot;: [
+            {
+                &quot;txid&quot;: &quot;a8fe8f3f76cf28487be20fe5030243ac12348cd4033450414de7a4670bb0fb89&quot;,
+                &quot;confirmations&quot;: 3
+            }
+        ]
+    },    
+    &quot;btc_amount&quot;: 1.0,
+    &quot;min_btc_amount&quot;: 0.2,
+    &quot;other_amount&quot;: 230,
+    &quot;price&quot;: 232.3,
+    &quot;price-detail&quot;: {
+        &quot;type&quot;: &quot;percentage&quot;,
+        &quot;percent&quot;: 0.01,
+        &quot;market-price&quot;: 230
+    },
+    &quot;created&quot;: 1471632887,
+    &quot;deposit&quot;: 0.01,
+    &quot;offerer&quot;: &quot;a2wt75feadp232wx.onion:9999&quot;,
+    &quot;arbitrators&quot;: [
+        &quot;pkfcmj42c6es6tjt.onion:9999&quot;,
+        &quot;ntjhaj27rylxwvnp.onion:9999&quot;
+    ]
+}</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >offer_id</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >Identifies the offer</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        <div class="notes">
+        <h4>Notes</h4>
+        <ul>
+                <li class="noteitem">Returns an error if insufficient funds in wallet.</li>
+                </ul>
+    </div>
+        
+        <div class="seealso">
+        <h4>See Also</h4>
+        <ul>
+                <li class="seealsoitem"><a href="#offer_list">offer_list</a></li>
+                </ul>
+    </div>
+        
+</div>
+<div class="api widget">
+    <div class="method" id="offer_list">/api/offer_list</div>
+    <div class="description">Lists offers according to selection criteria.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/offer_list?market=xmr_btc&amp;whose=mine</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">[
+    {
+        &quot;offer_id&quot;: &quot;f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&quot;
+        &quot;direction&quot;: &quot;sell&quot;,
+        &quot;status&quot;: &quot;live&quot;,
+        &quot;funding&quot;: {
+            &quot;deposit_amount&quot;: 0.01,
+            &quot;deposit_address&quot;: &quot;14w4mZx4b6JjtEd9BZPnLCSXzbHjKH3Pn3&quot;,
+            &quot;tx-list&quot;: [
+                {
+                    &quot;txid&quot;: &quot;a8fe8f3f76cf28487be20fe5030243ac12348cd4033450414de7a4670bb0fb89&quot;,
+                    &quot;confirmations&quot;: 3
+                }
+            ]
+        },
+        &quot;btc_amount&quot;: 1.0,
+        &quot;min_btc_amount&quot;: 0.2,
+        &quot;other_amount&quot;: 230,
+        &quot;price&quot;: 232.3,
+        &quot;price-detail&quot;: {
+            &quot;type&quot;: &quot;percentage&quot;,
+            &quot;percent&quot;: 0.01,
+            &quot;market-price&quot;: 230
+        },
+        &quot;created&quot;: 1471632887,
+        &quot;offerer&quot;: &quot;a2wt75feadp232wx.onion:9999&quot;,
+        &quot;arbitrators&quot;: [
+            &quot;pkfcmj42c6es6tjt.onion:9999&quot;,
+            &quot;ntjhaj27rylxwvnp.onion:9999&quot;
+        ]
+    }
+    ...
+]</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >market</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >filter by market</td>
+<td class='td-required' >No</td>
+<td class='td-values' ><market> | "all"</td>
+<td class='td-default' >all</td>
+</tr>
+<tr class='cnt-2 even' >
+<td class='td-param' >status</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >filter by status</td>
+<td class='td-required' >No</td>
+<td class='td-values' >"unfunded" | "live" | "done" | "cancelled" | "all"</td>
+<td class='td-default' >all</td>
+</tr>
+<tr class='cnt-3 odd' >
+<td class='td-param' >whose</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >filter by offer creator</td>
+<td class='td-required' >No</td>
+<td class='td-values' >"mine" | "notmine" | "all"</td>
+<td class='td-default' >all</td>
+</tr>
+<tr class='cnt-4 even' >
+<td class='td-param' >start</td>
+<td class='td-type' >longint</td>
+<td class='td-desc' >find offers after start time. seconds since 1970.</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default' >0</td>
+</tr>
+<tr class='cnt-5 odd' >
+<td class='td-param' >end</td>
+<td class='td-type' >longint</td>
+<td class='td-desc' >find offers before end time. seconds since 1970.</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default' >9223372036854775807</td>
+</tr>
+<tr class='cnt-6 even' >
+<td class='td-param' >limit</td>
+<td class='td-type' >int</td>
+<td class='td-desc' >max records to return</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default' >100</td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        <div class="notes">
+        <h4>Notes</h4>
+        <ul>
+                <li class="noteitem">price-detail/type may be &quot;percentage&quot; or &quot;fixed&quot;.  If percentage, then
+the value of &quot;price&quot; may change from call-to-call depending on the current value
+of &quot;market-price&quot;. If &quot;fixed&quot;, then price is static and the price-detail/percent
+key will not be present.</li>
+                <li class="noteitem">when status == &quot;done&quot;, there will now exist a trade with the same
+trade_id as the offer_id.</li>
+                <li class="noteitem">TBD: Can we give trade its own trade_id distinct from offer_id?  seems cleaner.</li>
+                </ul>
+    </div>
+        
+        <div class="seealso">
+        <h4>See Also</h4>
+        <ul>
+                <li class="seealsoitem"><a href="#offer_detail">offer_detail</a></li>
+                </ul>
+    </div>
+        
+</div>
+<div class="api widget">
+    <div class="method" id="offer_make">/api/offer_make</div>
+    <div class="description">Make (create) a new, unfunded offer.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/offer_create?market=xmr_btc&amp;direction=buy&amp;amount=1.2&amp;min_amount=0.25&amp;price=0.01925</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">{
+    &quot;offer_id&quot;: &quot;f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&quot;,
+    &quot;deposit_amount&quot;: &quot;0.0107&quot;,
+    &quot;deposit_address&quot;: &quot;14w4mZx4b6JjtEd9BZPnLCSXzbHjKH3Pn3&quot;,
+    &quot;detail&quot;: {
+        &quot;direction&quot;: &quot;buy&quot;,
+        &quot;amount&quot;: &quot;1.2&quot;,
+        &quot;min_amount&quot;: &quot;0.25&quot;,
+        &quot;price&quot;: &quot;0.01925&quot;,
+        &quot;security_deposit&quot;: &quot;0.01&quot;,
+        &quot;trade_fee&quot;: &quot;0.0005&quot;,
+        &quot;mining_fee&quot;: &quot;0.0002&quot;,
+    }
+}</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >market</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >identifies the market this offer will be placed in</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-2 even' >
+<td class='td-param' >account_id</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >identifies the account to which funds will be received once offer is executed.</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-3 odd' >
+<td class='td-param' >direction</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >defines if this is an offer to buy or sell</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' >sell | buy</td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-4 even' >
+<td class='td-param' >amount</td>
+<td class='td-type' >real</td>
+<td class='td-desc' >amount to buy or sell, in terms of left side of market pair</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-5 odd' >
+<td class='td-param' >min_amount</td>
+<td class='td-type' >real</td>
+<td class='td-desc' >minimum amount to buy or sell, in terms of left side of market pair</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-6 even' >
+<td class='td-param' >price_type</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >defines if this is a fixed offer or a percentage offset from present market price.</td>
+<td class='td-required' >No</td>
+<td class='td-values' >fixed | percentage</td>
+<td class='td-default' >fixed</td>
+</tr>
+<tr class='cnt-7 odd' >
+<td class='td-param' >price</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >interpreted according to "price-type".  Percentages should be expressed in decimal form eg 1/2 of 1% = "0.005" and must be positive</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        <div class="notes">
+        <h4>Notes</h4>
+        <ul>
+                <li class="noteitem">The offer must be funded before it will be placed in offer book</li>
+                <li class="noteitem">Funding can be done from Bitsquare internal wallet by calling wallet_fund_offer_internal, or from an external wallet by sending 'deposit_amount' to 'deposit_address'</li>
+                <li class="noteitem">full details about the offer can be retrieved with offer_detail.</li>
+                <li class="noteitem">'account_id' must refer to an account denominated in the same currency as 'market'</li>
+                </ul>
+    </div>
+        
+        <div class="seealso">
+        <h4>See Also</h4>
+        <ul>
+                <li class="seealsoitem"><a href="#wallet_fund_offer_internal">wallet_fund_offer_internal</a></li>
+                <li class="seealsoitem"><a href="#offer_detail">offer_detail</a></li>
+                <li class="seealsoitem"><a href="#offer_take">offer_take</a></li>
+                </ul>
+    </div>
+        
+</div>
+<div class="api widget">
+    <div class="method" id="offer_take">/api/offer_take</div>
+    <div class="description">Take (accept) an existing offer.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/offer_take?offer_id=f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&amp;account_id=6d4c54da82e3&amp;amount=0.55</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">{
+    &quot;offer_id&quot;: &quot;1345132452341234322341234&quot;,
+    &quot;deposit_amount&quot;: 1.0103,
+    &quot;deposit_address&quot;: &quot;12gWwt6bRDDEa6BJPkWoYpn2aoq8ayhFe9&quot;,
+    &quot;detail&quot;: {
+        &quot;account_id&quot;: &quot;6d4c54da82e3&quot;,
+        &quot;trade_amount&quot;: &quot;0.55&quot;,
+        &quot;security_deposit&quot;: 0.01,
+        &quot;trade_fee&quot;: 0.0001,
+        &quot;mining_fee&quot;: 0.0002
+    }
+}</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >offer_id</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >Identifies the offer to accept</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-2 even' >
+<td class='td-param' >account_id</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >Identifies the payment account to receive funds into</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-3 odd' >
+<td class='td-param' >amount</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >amount to spend</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        <div class="notes">
+        <h4>Notes</h4>
+        <ul>
+                <li class="noteitem">&quot;trade_amount&quot; may or may not be present depending on caller's trade direction.  ( Present when buying BTC.  Absent when selling. )</li>
+                <li class="noteitem">The trade can be funded by sending payment from an external wallet or by calling wallet_fund_offer_internal</li>
+                <li class="noteitem">The offer is not considered taken until funds are received.</li>
+                </ul>
+    </div>
+        
+        <div class="seealso">
+        <h4>See Also</h4>
+        <ul>
+                <li class="seealsoitem"><a href="#wallet_fund_offer_internal">wallet_fund_offer_internal</a></li>
+                <li class="seealsoitem"><a href="#offer_detail">offer_detail</a></li>
+                <li class="seealsoitem"><a href="#offer_take">offer_take</a></li>
+                </ul>
+    </div>
+        
+</div>
+<div class="api widget">
+    <div class="method" id="trade_detail">/api/trade_detail</div>
+    <div class="description">Returns details of a specific trade, including trade status for maker and taker.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/trade_detail?trade_id=f6dab9d5-163f-4c2a-9c35-2d4c54da82e3</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">{
+    &quot;trade_id&quot;: &quot;5b6502f3-057e-454d-8ac5-8430f75b97c2&quot;,
+    &quot;market&quot;: &quot;XMR/BTC&quot;,
+    &quot;direction&quot;: &quot;BUY&quot;,
+    &quot;price&quot;: 2349100,
+    &quot;amount&quot;: 20000000,
+    &quot;trade_date&quot;: 1471701655737,
+    &quot;payment_method&quot;: &quot;BLOCK_CHAINS&quot;,
+    &quot;offer_date&quot;: 1471689741937,
+    &quot;use_market_based_price&quot;: true,
+    &quot;market_price_margin&quot;: 0.015,
+    &quot;offer_amount&quot;: 20000000,
+    &quot;offer_min_amount&quot;: 20000000,
+    &quot;deposit_tx_id&quot;: &quot;8e4801f91fea301740c35fe1dbce918d94510d33f8ca484652838bc76c687817&quot;,
+    &quot;offer_id&quot;: &quot;3c6502f3-057e-454d-8ac5-8430f75b97c4&quot;,
+    &quot;status&quot;: {
+        &quot;maker&quot;: // TODO
+        &quot;taker&quot;: // TODO
+    }
+}</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >trade_id</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >Identifies the trade</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        <div class="notes">
+        <h4>Notes</h4>
+        <ul>
+                <li class="noteitem">the status fields will be used for client's to poll while waiting for trade to complete.  Possibly we could make a separate (faster) API for this purpose.</li>
+                </ul>
+    </div>
+        
+        
+</div>
+<div class="api widget">
+    <div class="method" id="wallet_addresses">/api/wallet_addresses</div>
+    <div class="description">Returns list of wallet addresses.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/wallet_addresses?status=funded</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">[
+    {
+        &quot;address&quot;: &quot;14w4mZx4b6JjtEd9BZPnLCSXzbHjKH3Pn3&quot;,
+        &quot;balance&quot;: 1.3453
+    },
+    ...
+]</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >status</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >filter by wether each address has a non-zero balance or not</td>
+<td class='td-required' >No</td>
+<td class='td-values' >funded | unfunded | both</td>
+<td class='td-default' >both</td>
+</tr>
+<tr class='cnt-2 even' >
+<td class='td-param' >start</td>
+<td class='td-type' >int</td>
+<td class='td-desc' >starting index, zero based</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default'  align='right'>0</td>
+</tr>
+<tr class='cnt-3 odd' >
+<td class='td-param' >limit</td>
+<td class='td-type' >int</td>
+<td class='td-desc' >max number of addresses to return.</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default' >100</td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        
+        
+</div>
+<div class="api widget">
+    <div class="method" id="wallet_deposit_address">/api/wallet_deposit_address</div>
+    <div class="description">Returns a new, unused wallet address for deposit purposes.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/wallet_deposit_address</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">&quot;14w4mZx4b6JjtEd9BZPnLCSXzbHjKH3Pn3&quot;</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >force_unique</td>
+<td class='td-type' >bool</td>
+<td class='td-desc' >if true each address will be given out only once.  else unused addresses may be given out multiple times to avoid hd-wallet gaps</td>
+<td class='td-required' >No</td>
+<td class='td-values' >true | false</td>
+<td class='td-default' >false</td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        
+        
+</div>
+<div class="api widget">
+    <div class="method" id="wallet_detail">/api/wallet_detail</div>
+    <div class="description">Returns wallet info.  balance, etc.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/wallet_detail</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">{
+    &quot;available_balance&quot;: 1.5623,
+    &quot;reserved_balance&quot;: 0.32,
+    &quot;locked_balance&quot;: 0.0125
+    // TBD
+}</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                None
+                </div>
+    </div>
+    
+        
+        
+</div>
+<div class="api widget">
+    <div class="method" id="wallet_fund_offer_internal">/api/wallet_fund_offer_internal</div>
+    <div class="description">Moves BTC funds from internal wallet to offer, at time of offer creation.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/wallet_fund_offer?offer_id=f6dab9d5-163f-4c2a-9c35-2d4c54da82e3</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">{
+    &quot;offer_id&quot;: &quot;f6dab9d5-163f-4c2a-9c35-2d4c54da82e3&quot;,
+    &quot;funded&quot;: true,
+    &quot;funds_moved&quot;: 1.342
+    &quot;source_address&quot;: &quot;&lt;btc addr&gt;&quot;
+}</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >offer_id</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >Identifies the offer to fund</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-2 even' >
+<td class='td-param' >source_address</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >identifies bitcoin source address for coin selection.  if omitted, an address will be selected automatically.</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        <div class="notes">
+        <h4>Notes</h4>
+        <ul>
+                <li class="noteitem">Returns an error if insufficient funds in wallet.</li>
+                <li class="noteitem">TBD: mk mentioned something about states: undefined, fee_paid, available.</li>
+                </ul>
+    </div>
+        
+        <div class="seealso">
+        <h4>See Also</h4>
+        <ul>
+                <li class="seealsoitem"><a href="#offer_make">offer_make</a></li>
+                <li class="seealsoitem"><a href="#offer_take">offer_take</a></li>
+                </ul>
+    </div>
+        
+</div>
+<div class="api widget">
+    <div class="method" id="wallet_send">/api/wallet_send</div>
+    <div class="description">Sends BTC funds from wallet to any bitcoin address.</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/wallet_send?address=14w4mZx4b6JjtEd9BZPnLCSXzbHjKH3Pn3&amp;amount=1.55</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">&quot;&lt;btc txid&gt;&quot;</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >address_payto</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >recipient address</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-2 even' >
+<td class='td-param' >amount</td>
+<td class='td-type' >real</td>
+<td class='td-desc' >amount to send</td>
+<td class='td-required' >Yes</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+<tr class='cnt-3 odd' >
+<td class='td-param' >address_sources</td>
+<td class='td-type' >csvstring</td>
+<td class='td-desc' >one or more source addresses, for coin control.  If omitted, addresses will be automatically chosen</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default' ></td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        <div class="notes">
+        <h4>Notes</h4>
+        <ul>
+                <li class="noteitem">a list of funded addresses is available via the wallet_addresses api</li>
+                </ul>
+    </div>
+        
+        <div class="seealso">
+        <h4>See Also</h4>
+        <ul>
+                <li class="seealsoitem"><a href="#wallet_addresses">wallet_addresses</a></li>
+                </ul>
+    </div>
+        
+</div>
+<div class="api widget">
+    <div class="method" id="wallet_tx_list">/api/wallet_tx_list</div>
+    <div class="description">Returns list of wallet transactions according to criteria</div>
+    <div class="examples">
+                <div class="example">
+            <h4>Sample Request</h4>
+            <div class="requestexample">http://localhost/api/wallet_tx_list</div>
+            <h4>Sample Response</h4>
+            <div class="responseexample">{
+    &quot;amount&quot;: 1.3453,
+    &quot;type&quot;: &quot;send&quot;,
+    &quot;address&quot;: &quot;14w4mZx4b6JjtEd9BZPnLCSXzbHjKH3Pn3&quot;,
+    &quot;time&quot;: &lt;timestamp&gt;,
+    &quot;confirmations&quot;: 5,
+    &quot;txid&quot;: &quot;e169edeeb8fa2cfc6c341a0c3f0b8f505f3e1984c7de8c22ea047bcf074862fe&quot;,
+    &quot;detail&quot;: &quot;Withdrawn from wallet&quot;
+    // TBD
+}</div>
+        </div>
+            </div>
+    
+    <div class="params">
+        <h4>Parameters</h4>
+        <div>
+                <table class="bordered">
+<thead><tr class='tr-header' >
+<th class='td-header-0'>param</th>
+<th class='td-header-1'>type</th>
+<th class='td-header-2'>desc</th>
+<th class='td-header-3'>required</th>
+<th class='td-header-4'>values</th>
+<th class='td-header-5'>default</th>
+</tr></thead>
+<tbody>
+<tr class='cnt-1 odd' >
+<td class='td-param' >type</td>
+<td class='td-type' >string</td>
+<td class='td-desc' >transaction type</td>
+<td class='td-required' >No</td>
+<td class='td-values' >send | receive</td>
+<td class='td-default'  align='right'>0</td>
+</tr>
+<tr class='cnt-2 even' >
+<td class='td-param' >start</td>
+<td class='td-type' >longint</td>
+<td class='td-desc' >start of period</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default'  align='right'>0</td>
+</tr>
+<tr class='cnt-3 odd' >
+<td class='td-param' >end</td>
+<td class='td-type' >longint</td>
+<td class='td-desc' >end of period</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default' >INT_MAX</td>
+</tr>
+<tr class='cnt-4 even' >
+<td class='td-param' >limit</td>
+<td class='td-type' >int</td>
+<td class='td-desc' >max record to return</td>
+<td class='td-required' >No</td>
+<td class='td-values' ></td>
+<td class='td-default' >100</td>
+</tr>
+</tbody>
+</table>
+                </div>
+    </div>
+    
+        
+        
+</div>
+
+<div class="errors widget" id="errors">
+    <h4>Error Responses</h4>APIs will return an error struct on any error.  The error struct looks like:
+
+<div class="responseexample">
+{
+    &quot;error&quot;: true,
+    &quot;code: &lt;int&gt;,
+    &quot;message&quot;: &lt;string&gt;
+}</div>
+Results from successful API calls will not contain the &quot;error&quot; key, or if present the value will be false.
+
+Therefore, an error can be detected by checking that the error key exists and is set to true.   
+    
+</div>
+
+</body>
+</html>
