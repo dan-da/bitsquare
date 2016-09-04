@@ -77,7 +77,7 @@ div.intro td {
 
 <div class="intro widget">
 <h2>Bitsquare API Specification</h2>
-<p id="apiversion">Version: bitsquare-api-1.0.0-draft2
+<p id="apiversion">Version: bitsquare-api-1.0.0-draft3
 </p>
 <table cellspacing="0">
 <tr><td>Authors:</td><td>Dan Libby &lt;dan@osc.co.cr&gt;, Mike Rosseel &lt;mike.rosseel@gmail.com&gt;, Manfred Karrer &lt;manfred@bitsquare.io&gt;<br/></td></tr>
@@ -164,32 +164,52 @@ RPC API.</p>
             <h4>Sample Response</h4>
             <div class="responseexample">[
     {
-        &quot;name&quot;: &quot;National Bank Transfer 234332523, 23544351&quot;,
-        &quot;payment_method&quot;: &quot;national_bank_transfer&quot;,
-        &quot;method_detail&quot;: {
-            &quot;country&quot;: &quot;us&quot;,
-            &quot;currency&quot;: &quot;USD&quot;,
-            &quot;account_holder_name&quot;: &quot;John Doe&quot;,
-            &quot;routing_number&quot;: &quot;23454352435&quot;,
-            &quot;account_number&quot;: &quot;982353543-345234-323423&quot;,
-            &quot;account_type&quot;: &quot;checking&quot;
+        &quot;account_id&quot;: &quot;c4e4645a-18e6-45be-8853-c7ebac68f0a4&quot;,
+        &quot;created&quot;: 1473010076100,
+        &quot;payment_method&quot;: {
+            &quot;payment_method_id&quot;: &quot;SEPA&quot;,
+            &quot;lock_time&quot;: 0,
+            &quot;max_trade_period&quot;: 691200000,
+            &quot;max_trade_limit&quot;: {
+                &quot;value&quot;: 75000000,
+                &quot;positive&quot;: true,
+                &quot;zero&quot;: false,
+                &quot;negative&quot;: false
+            }
         },
-        &quot;limitations&quot;: {
-            &quot;max-trade-duration&quot;: 345600,
-            &quot;max-trade-limit&quot;: 1
-        }
-    },
-    {
-        &quot;name&quot;: &quot;Cryptocurrencies, XMR, 44AFFq5k...&quot;,
-        &quot;payment_method&quot;: &quot;altcoins&quot;,
-        &quot;method_detail&quot;: {
-            &quot;address&quot;: &quot;44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A&quot;,
-            &quot;currency&quot;: &quot;XMR&quot;
+        &quot;account_name&quot;: &quot;SEPA, EUR, BE, BE...&quot;,
+        &quot;trade_currencies&quot;: ['EUR'],
+        &quot;selected_trade_currency&quot;: 'EUR',
+        &quot;contract_data&quot;: {
+            &quot;payment_method_name&quot;: &quot;SEPA&quot;,
+            &quot;contract_id&quot;: &quot;c4e4645a-18e6-45be-8853-c7ebac68f0a4&quot;,
+            &quot;max_trade_period&quot;: 691200000,
+            &quot;country_code&quot;: &quot;BE&quot;,
+            &quot;holder_name&quot;: &quot;Mike Rosseel&quot;,
+            &quot;iban&quot;: &quot;BE82063500018968&quot;,
+            &quot;bic&quot;: &quot;GKCCBEBB&quot;,
+            &quot;accepted_country_codes&quot;: [&quot;AT&quot;, &quot;BE&quot;, &quot;CY&quot;, &quot;DE&quot;, &quot;EE&quot;, &quot;ES&quot;, &quot;FI&quot;, &quot;FR&quot;, &quot;GR&quot;, &quot;IE&quot;, &quot;IT&quot;, &quot;LT&quot;, &quot;LU&quot;, &quot;LV&quot;, &quot;MC&quot;, &quot;MT&quot;, &quot;NL&quot;, &quot;PT&quot;, &quot;SI&quot;, &quot;SK&quot;],
+            &quot;payment_details&quot;: &quot;SEPA - Holder name: Mike Rosseel, IBAN: BE82063500018968, BIC: GKCCBEBB, country code: BE&quot;,
+            &quot;payment_details_for_trade_popup&quot;: &quot;Holder name: Mike Rosseel
+IBAN: BE82063500018968
+BIC: GKCCBEBB
+Country of bank: Belgium (BE)&quot;
         },
-        &quot;limitations&quot;: {
-            &quot;max-trade-duration&quot;: 345600,
-            &quot;max-trade-limit&quot;: 1
-        }
+        &quot;country&quot;: {
+            &quot;code&quot;: &quot;BE&quot;,
+            &quot;name&quot;: &quot;Belgium&quot;,
+            &quot;region&quot;: {
+                &quot;code&quot;: &quot;EU&quot;,
+                &quot;name&quot;: &quot;Europe&quot;
+            }
+        },
+        &quot;accepted_country_codes&quot;: [&quot;AT&quot;, &quot;BE&quot;, &quot;CY&quot;, &quot;DE&quot;, &quot;EE&quot;, &quot;ES&quot;, &quot;FI&quot;, &quot;FR&quot;, &quot;GR&quot;, &quot;IE&quot;, &quot;IT&quot;, &quot;LT&quot;, &quot;LU&quot;, &quot;LV&quot;, &quot;MC&quot;, &quot;MT&quot;, &quot;NL&quot;, &quot;PT&quot;, &quot;SI&quot;, &quot;SK&quot;],
+        &quot;bank_id&quot;: &quot;GKCCBEBB&quot;,
+        &quot;iban&quot;: &quot;BE82063500018968&quot;,
+        &quot;holder_name&quot;: &quot;Mike Rosseel&quot;,
+        &quot;bic&quot;: &quot;GKCCBEBB&quot;,
+        &quot;single_trade_currency&quot;: 'EUR',
+        &quot;payment_details&quot;: &quot;SEPA - Holder name: Mike Rosseel, IBAN: BE82063500018968, BIC: GKCCBEBB, country code: BE&quot;
     },
     ...
 ]</div>
@@ -206,8 +226,7 @@ RPC API.</p>
         <div class="notes">
         <h4>Notes</h4>
         <ul>
-                <li class="noteitem">The keys used inside the 'method_detail' will vary depending on the value of 'payment_method'.  All other keys are always present.</li>
-                <li class="noteitem">TODO: document all payment methods.</li>
+                <li class="noteitem">TODO: document which fields are constant for all account types.</li>
                 </ul>
     </div>
         

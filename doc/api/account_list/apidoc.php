@@ -18,32 +18,49 @@ class api_account_list {
                           'response' => <<< END
 [
     {
-        "name": "National Bank Transfer 234332523, 23544351",
-        "payment_method": "national_bank_transfer",
-        "method_detail": {
-            "country": "us",
-            "currency": "USD",
-            "account_holder_name": "John Doe",
-            "routing_number": "23454352435",
-            "account_number": "982353543-345234-323423",
-            "account_type": "checking"
+        "account_id": "c4e4645a-18e6-45be-8853-c7ebac68f0a4",
+        "created": 1473010076100,
+        "payment_method": {
+            "payment_method_id": "SEPA",
+            "lock_time": 0,
+            "max_trade_period": 691200000,
+            "max_trade_limit": {
+                "value": 75000000,
+                "positive": true,
+                "zero": false,
+                "negative": false
+            }
         },
-        "limitations": {
-            "max-trade-duration": 345600,
-            "max-trade-limit": 1
-        }
-    },
-    {
-        "name": "Cryptocurrencies, XMR, 44AFFq5k...",
-        "payment_method": "altcoins",
-        "method_detail": {
-            "address": "44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A",
-            "currency": "XMR"
+        "account_name": "SEPA, EUR, BE, BE...",
+        "trade_currencies": ['EUR'],
+        "selected_trade_currency": 'EUR',
+        "contract_data": {
+            "payment_method_name": "SEPA",
+            "contract_id": "c4e4645a-18e6-45be-8853-c7ebac68f0a4",
+            "max_trade_period": 691200000,
+            "country_code": "BE",
+            "holder_name": "Mike Rosseel",
+            "iban": "BE82063500018968",
+            "bic": "GKCCBEBB",
+            "accepted_country_codes": ["AT", "BE", "CY", "DE", "EE", "ES", "FI", "FR", "GR", "IE", "IT", "LT", "LU", "LV", "MC", "MT", "NL", "PT", "SI", "SK"],
+            "payment_details": "SEPA - Holder name: Mike Rosseel, IBAN: BE82063500018968, BIC: GKCCBEBB, country code: BE",
+            "payment_details_for_trade_popup": "Holder name: Mike Rosseel\nIBAN: BE82063500018968\nBIC: GKCCBEBB\nCountry of bank: Belgium (BE)"
         },
-        "limitations": {
-            "max-trade-duration": 345600,
-            "max-trade-limit": 1
-        }
+        "country": {
+            "code": "BE",
+            "name": "Belgium",
+            "region": {
+                "code": "EU",
+                "name": "Europe"
+            }
+        },
+        "accepted_country_codes": ["AT", "BE", "CY", "DE", "EE", "ES", "FI", "FR", "GR", "IE", "IT", "LT", "LU", "LV", "MC", "MT", "NL", "PT", "SI", "SK"],
+        "bank_id": "GKCCBEBB",
+        "iban": "BE82063500018968",
+        "holder_name": "Mike Rosseel",
+        "bic": "GKCCBEBB",
+        "single_trade_currency": 'EUR',
+        "payment_details": "SEPA - Holder name: Mike Rosseel, IBAN: BE82063500018968, BIC: GKCCBEBB, country code: BE"
     },
     ...
 ]
@@ -54,8 +71,7 @@ END
     }
     
     static function get_notes() {
-        return ["The keys used inside the 'method_detail' will vary depending on the value of 'payment_method'.  All other keys are always present.",
-                "TODO: document all payment methods."];
+        return ["TODO: document which fields are constant for all account types."];
     }
     
     static function get_seealso() {
